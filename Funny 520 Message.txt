@@ -1,0 +1,113 @@
+// Hanzhuo Gong
+// This program will display the funny message to user
+
+#include <iostream>
+#include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
+#include <SFML\System.hpp>
+#include <SFML\Window.hpp>
+using namespace sf;
+
+
+int main()
+{
+	RenderWindow window(sf::VideoMode(1280, 1080), "520 Message!");
+
+	Music music, music2;
+	Font font;
+	Texture bg,bg2;
+	Clock delay, delay2;
+
+   //Load background image
+	bg.loadFromFile("520bg2.jpg");
+	bg2.loadFromFile("520bg3.jpg");
+
+	Sprite backGround(bg),backGround2(bg2);
+
+   //Load  music and font, and show error message if fail to load
+	if (!music.openFromFile("LebLaugh.wav")) {
+		std::cout << "Can't open the music file" << std::endl;
+	}
+
+	if (!music2.openFromFile("bgm.wav")) {
+		std::cout << "Can't open the music file" << std::endl;
+	}
+
+	if (!font.loadFromFile("simfang.ttf")) {
+		std::cout << "Can't open the font file" << std::endl;
+	}
+
+	Text text, text1, text2, text3, text4;
+   //Text properties
+	text.setFont(font);
+	text.setCharacterSize(30);
+	text.setString("For everyone who got kenged in May 20th:");
+	text.setPosition(300, 50);
+	text.setStyle(Text::Bold);
+	
+
+	text1.setFont(font);
+	text1.setCharacterSize(30);
+	text1.setString("I want to tell you: ");
+	text1.setPosition(300, 100);
+
+	text2.setFont(font);
+	text2.setCharacterSize(50);
+	text2.setString("------>");
+	text2.setPosition(300, 200);
+
+	text3.setFont(font);
+	text3.setCharacterSize(30);
+	text3.setString("I made this program just for YOU! and I want to tell you:");
+	text3.setPosition(250, 400);
+
+	text4.setFont(font);
+	text4.setCharacterSize(30);
+	text4.setString("Lying is like 95% of what I do, Hahahaha~");
+	text4.setPosition(300, 500);
+
+   //Play the music
+	music2.play();
+
+   //Display the window
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+      //Clear the window and draw background and text
+		window.clear();
+		window.draw(backGround);
+		window.draw(text);
+
+      //Display text1 and text2 after 4 sec
+		if (delay.getElapsedTime() > seconds(4)) {
+			window.draw(text1);
+			window.draw(text2);
+		}
+		
+      //Display text3 after 8 sec
+		if (delay.getElapsedTime() > seconds(8)) {
+			window.draw(text3);
+		}
+
+      //After wait for 12 sec, clear the window, draw background 2
+      //switch the background music
+		if (delay.getElapsedTime() > seconds(12)) {
+			window.clear();
+			window.draw(backGround2);
+			music2.stop();
+			if (music.getStatus() != Sound::Playing) {
+				music.play();
+			}
+			window.draw(text4);
+		}
+		window.display();
+	}
+    return 0;
+}
+
